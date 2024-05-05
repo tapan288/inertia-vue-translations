@@ -5,11 +5,19 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import { Link, usePage } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
 
 const page = usePage();
 
 const showingNavigationDropdown = ref(false);
+
+const switchLanguage = (event) => {
+    router.post(
+        route("language.switch", {
+            language: event.target.value,
+        })
+    );
+};
 </script>
 
 <template>
@@ -45,6 +53,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
                             <div class="ml-3 relative">
                                 <select
+                                    @change="switchLanguage($event)"
                                     name="language"
                                     id="language"
                                     class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
@@ -52,6 +61,7 @@ const showingNavigationDropdown = ref(false);
                                     <option
                                         v-for="language in $page.props.languages
                                             .data"
+                                        :value="language.value"
                                         :selected="
                                             language.value ===
                                             $page.props.language
