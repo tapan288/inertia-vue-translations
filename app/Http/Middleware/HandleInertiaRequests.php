@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'language' => app()->getLocale(),
-            'translations' => function () {
+            'translations' => cache()->rememberForever('translations.' . app()->getLocale(), function () {
                 return collect(File::allFiles(base_path('lang/' . app()->getLocale())))
                     ->flatMap(function ($file) {
                         return Arr::dot(
@@ -47,7 +47,7 @@ class HandleInertiaRequests extends Middleware
                             $file->getBasename($file->getExtension())
                         );
                     });
-            },
+            }),
             'languages' => LanguageResource::collection(Lang::cases()),
         ];
     }
